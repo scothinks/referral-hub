@@ -11,13 +11,28 @@ import Dashboard from './components/Dashboard';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/setup" />} />
-        <Route path="/setup" element={<Setup />} />
-        <Route path="/activate" element={<Activate />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-      <ToastContainer />
+      <div className="font-sans antialiased text-gray-900 min-h-screen bg-gray-50">
+        <Routes>
+          <Route path="/" element={<Navigate to="/setup" />} />
+          <Route path="/setup" element={<Setup />} />
+          <Route path="/activate" element={<Activate />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="!bg-white !text-gray-800 !rounded-lg !shadow-md"
+        progressClassName="!bg-opera-red"
+      />
     </Router>
   </React.StrictMode>
 );

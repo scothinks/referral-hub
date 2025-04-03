@@ -1,18 +1,33 @@
 import React from 'react';
 
-export const Button = ({ children, onClick, className, variant = 'primary' }) => {
-  const baseClasses = 'px-4 py-2 rounded-md text-white transition-colors duration-300';
+export const Button = ({ 
+  children, 
+  onClick, 
+  className = '', 
+  variant = 'primary',
+  size = 'default',
+  icon: Icon,
+  ...props
+}) => {
+  const baseClasses = 'btn flex items-center justify-center';
   const variantClasses = {
-    primary: 'bg-blue-600 hover:bg-blue-700',
-    outline: 'bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-100',
-    destructive: 'bg-red-600 hover:bg-red-700'
+    primary: 'btn-primary',
+    outline: 'btn-outline',
+    destructive: 'btn-primary bg-[#cc0f16] hover:bg-[#a50c12]', // Using Opera red
+    success: 'btn-success'
+  };
+  const sizeClasses = {
+    default: '',
+    lg: 'btn-lg'
   };
 
   return (
     <button
       onClick={onClick}
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      {...props}
     >
+      {Icon && <Icon className={children ? 'mr-2' : ''} size={20} />}
       {children}
     </button>
   );

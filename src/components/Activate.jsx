@@ -13,7 +13,8 @@ import { Input } from './ui/input';
 import {
   Lock,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Mail
 } from 'lucide-react';
 
 const PasswordStrengthIndicator = ({ password }) => {
@@ -22,18 +23,20 @@ const PasswordStrengthIndicator = ({ password }) => {
     { test: (p) => /\d/.test(p), label: 'Contains a number' },
     { test: (p) => /[A-Z]/.test(p), label: 'Contains a capital letter' }
   ];
-
+  
   return (
     <div className="space-y-2 mt-2">
       {checks.map((check, index) => {
         const passed = check.test(password);
         return (
-          <div
-            key={index}
-            className={`flex items-center space-x-2 ${passed ? 'text-green-600' : 'text-red-500'}`}
-          >
-            {passed ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
-            <span className="text-sm">{check.label}</span>
+          <div key={index} className="flex items-center gap-2 text-sm">
+            {passed ? 
+              <CheckCircle2 className="h-4 w-4 text-green-500" /> : 
+              <XCircle className="h-4 w-4 text-red-500" />
+            }
+            <span className={passed ? "text-green-700" : "text-gray-600"}>
+              {check.label}
+            </span>
           </div>
         );
       })}
@@ -60,7 +63,7 @@ const Activate = () => {
       /\d/.test(password),
       /[A-Z]/.test(password)
     ];
-
+    
     if (!passwordChecks.every(Boolean)) {
       toast.error('Password does not meet all requirements', {
         position: "top-right",
@@ -69,15 +72,15 @@ const Activate = () => {
       });
       return;
     }
-
+    
     const tempId = localStorage.getItem('tempId');
     const role = localStorage.getItem('role');
     const hashedPassword = btoa(password);
-
+    
     localStorage.setItem('password', hashedPassword);
     localStorage.setItem('activated', 'true');
     localStorage.setItem('backupEmail', backupEmail);
-
+    
     toast.success('Account Activated Successfully!', {
       position: "top-right",
       autoClose: 2000,
@@ -86,40 +89,63 @@ const Activate = () => {
   };
 
   return (
-    <div className="container">
-      <div className="w-full max-w-sm space-y-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Activate Account</h2>
-          <p className="mt-2 text-sm text-gray-600">Create a strong password to secure your account</p>
-        </div>
-
-        <div className="space-y-4">
-          <Input
-            type="password"
-            placeholder="Enter secure password"
-            value={password}
-            onChange={handlePasswordChange}
-            className="w-full"
-          />
-          <PasswordStrengthIndicator password={password} />
-          <Input
-            type="email"
-            placeholder="Backup Email (optional)"
-            value={backupEmail}
-            onChange={handleBackupEmailChange}
-            className="w-full"
-          />
-          <p className="text-sm text-gray-600">
-            If you ever forget your password, we'll send a link to this email address to reset your password.
-          </p>
-          <Button
-            onClick={handleActivate}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1">
+          <div className="flex justify-center mb-4">
+            <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <Lock className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
+          <CardTitle className="text-2xl font-bold text-center">Activate Account</CardTitle>
+          <CardDescription className="text-center text-gray-500">
+            Create a strong password to secure your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <div className="relative">
+              <Input
+                type="password"
+                id="password"
+                placeholder="Create Password"
+                value={password}
+                onChange={handlePasswordChange}
+                className="pl-10 w-full bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            </div>
+            <PasswordStrengthIndicator password={password} />
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="backupEmail" className="block text-sm font-medium text-gray-700"><br></br>
+              Backup Email Address
+            </label>
+            <div className="text-xs text-gray-500 mb-2">
+              If you forget your password, we'll send a reset link to this email address.
+            </div>
+            <div className="relative">
+              <Input
+                type="email"
+                id="backupEmail"
+                placeholder="Enter your email"
+                value={backupEmail}
+                onChange={handleBackupEmailChange}
+                className="pl-10 w-full bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            </div>
+          </div>
+          
+          <Button 
+            onClick={handleActivate} 
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition-colors"
           >
             Activate Account
           </Button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
